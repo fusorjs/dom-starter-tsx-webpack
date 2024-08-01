@@ -1,0 +1,8 @@
+.wrap {
+  border: 1em solid rgb(255, 200, 160);
+  padding: 1em;
+}
+
+.logo {
+  height: 5em;
+}
