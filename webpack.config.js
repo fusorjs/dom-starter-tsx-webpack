@@ -1,28 +1,23 @@
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
 const isDevelopment = process.env.NODE_ENV?.trim() === "development";
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: "./src/index.ts",
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
   ],
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".ts", ".tsx", "..."],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/i,
-        exclude: ["/node_modules/"],
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"],
-          },
-        },
+        test: /\.tsx?$/i,
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/i,
@@ -30,6 +25,10 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: "asset/resource",
       },
     ],
@@ -42,5 +41,11 @@ module.exports = {
       }
     : {
         mode: "production",
+        output: {
+          filename: "[name].[contenthash].js",
+          path: path.resolve(__dirname, "dist"),
+          publicPath: "/", // root
+          clean: true,
+        },
       }),
 };
